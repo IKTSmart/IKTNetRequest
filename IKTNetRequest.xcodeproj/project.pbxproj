@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		0544BE541CF06EE4009FF7A5 /* MyImage.png in Resources */ = {isa = PBXBuildFile; fileRef = 0544BE531CF06EE4009FF7A5 /* MyImage.png */; };
-		0576AEF81C8D83ED0024DCB4 /* IKTRequestHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 0576AEF71C8D83ED0024DCB4 /* IKTRequestHelper.m */; };
 		05F34B0D1C7EE82500BEA049 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 05F34B0C1C7EE82500BEA049 /* main.m */; };
 		05F34B101C7EE82500BEA049 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 05F34B0F1C7EE82500BEA049 /* AppDelegate.m */; };
 		05F34B131C7EE82500BEA049 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 05F34B121C7EE82500BEA049 /* ViewController.m */; };
@@ -17,8 +16,9 @@
 		05F34B1B1C7EE82600BEA049 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 05F34B191C7EE82600BEA049 /* LaunchScreen.storyboard */; };
 		05F34B261C7EE82600BEA049 /* IKTNetRequestTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 05F34B251C7EE82600BEA049 /* IKTNetRequestTests.m */; };
 		05F34B311C7EE82600BEA049 /* IKTNetRequestUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 05F34B301C7EE82600BEA049 /* IKTNetRequestUITests.m */; };
-		05F34B411C7EE86F00BEA049 /* IKTNetRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 05F34B401C7EE86F00BEA049 /* IKTNetRequest.m */; };
-		05F922A11C99997E002E62C0 /* IKTRequestConfiguration.m in Sources */ = {isa = PBXBuildFile; fileRef = 05F922A01C99997E002E62C0 /* IKTRequestConfiguration.m */; };
+		05FD09811D9A192E00DA3F2C /* IKTNetRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 05FD097C1D9A192E00DA3F2C /* IKTNetRequest.m */; };
+		05FD09821D9A192E00DA3F2C /* IKTRequestConfiguration.m in Sources */ = {isa = PBXBuildFile; fileRef = 05FD097E1D9A192E00DA3F2C /* IKTRequestConfiguration.m */; };
+		05FD09831D9A192E00DA3F2C /* IKTRequestHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 05FD09801D9A192E00DA3F2C /* IKTRequestHelper.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -40,9 +40,6 @@
 
 /* Begin PBXFileReference section */
 		0544BE531CF06EE4009FF7A5 /* MyImage.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = MyImage.png; sourceTree = "<group>"; };
-		0576AEF61C8D83ED0024DCB4 /* IKTRequestHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IKTRequestHelper.h; sourceTree = "<group>"; };
-		0576AEF71C8D83ED0024DCB4 /* IKTRequestHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IKTRequestHelper.m; sourceTree = "<group>"; };
-		0576AEF91C8DC5D70024DCB4 /* IKTNetHeader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = IKTNetHeader.h; sourceTree = "<group>"; };
 		05F34B081C7EE82500BEA049 /* IKTNetRequest.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = IKTNetRequest.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		05F34B0C1C7EE82500BEA049 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		05F34B0E1C7EE82500BEA049 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -59,10 +56,13 @@
 		05F34B2C1C7EE82600BEA049 /* IKTNetRequestUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = IKTNetRequestUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		05F34B301C7EE82600BEA049 /* IKTNetRequestUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = IKTNetRequestUITests.m; sourceTree = "<group>"; };
 		05F34B321C7EE82600BEA049 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		05F34B3F1C7EE86F00BEA049 /* IKTNetRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IKTNetRequest.h; sourceTree = "<group>"; };
-		05F34B401C7EE86F00BEA049 /* IKTNetRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IKTNetRequest.m; sourceTree = "<group>"; };
-		05F9229F1C99997E002E62C0 /* IKTRequestConfiguration.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IKTRequestConfiguration.h; sourceTree = "<group>"; };
-		05F922A01C99997E002E62C0 /* IKTRequestConfiguration.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IKTRequestConfiguration.m; sourceTree = "<group>"; };
+		05FD097A1D9A192E00DA3F2C /* IKTNetHeader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IKTNetHeader.h; sourceTree = "<group>"; };
+		05FD097B1D9A192E00DA3F2C /* IKTNetRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IKTNetRequest.h; sourceTree = "<group>"; };
+		05FD097C1D9A192E00DA3F2C /* IKTNetRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IKTNetRequest.m; sourceTree = "<group>"; };
+		05FD097D1D9A192E00DA3F2C /* IKTRequestConfiguration.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IKTRequestConfiguration.h; sourceTree = "<group>"; };
+		05FD097E1D9A192E00DA3F2C /* IKTRequestConfiguration.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IKTRequestConfiguration.m; sourceTree = "<group>"; };
+		05FD097F1D9A192E00DA3F2C /* IKTRequestHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IKTRequestHelper.h; sourceTree = "<group>"; };
+		05FD09801D9A192E00DA3F2C /* IKTRequestHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IKTRequestHelper.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -157,13 +157,13 @@
 		05F34B3E1C7EE85500BEA049 /* IKTNetRequest */ = {
 			isa = PBXGroup;
 			children = (
-				05F34B3F1C7EE86F00BEA049 /* IKTNetRequest.h */,
-				05F34B401C7EE86F00BEA049 /* IKTNetRequest.m */,
-				05F9229F1C99997E002E62C0 /* IKTRequestConfiguration.h */,
-				05F922A01C99997E002E62C0 /* IKTRequestConfiguration.m */,
-				0576AEF61C8D83ED0024DCB4 /* IKTRequestHelper.h */,
-				0576AEF71C8D83ED0024DCB4 /* IKTRequestHelper.m */,
-				0576AEF91C8DC5D70024DCB4 /* IKTNetHeader.h */,
+				05FD097A1D9A192E00DA3F2C /* IKTNetHeader.h */,
+				05FD097B1D9A192E00DA3F2C /* IKTNetRequest.h */,
+				05FD097C1D9A192E00DA3F2C /* IKTNetRequest.m */,
+				05FD097D1D9A192E00DA3F2C /* IKTRequestConfiguration.h */,
+				05FD097E1D9A192E00DA3F2C /* IKTRequestConfiguration.m */,
+				05FD097F1D9A192E00DA3F2C /* IKTRequestHelper.h */,
+				05FD09801D9A192E00DA3F2C /* IKTRequestHelper.m */,
 			);
 			path = IKTNetRequest;
 			sourceTree = "<group>";
@@ -300,11 +300,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				05F34B131C7EE82500BEA049 /* ViewController.m in Sources */,
+				05FD09821D9A192E00DA3F2C /* IKTRequestConfiguration.m in Sources */,
 				05F34B101C7EE82500BEA049 /* AppDelegate.m in Sources */,
-				05F922A11C99997E002E62C0 /* IKTRequestConfiguration.m in Sources */,
-				05F34B411C7EE86F00BEA049 /* IKTNetRequest.m in Sources */,
+				05FD09811D9A192E00DA3F2C /* IKTNetRequest.m in Sources */,
+				05FD09831D9A192E00DA3F2C /* IKTRequestHelper.m in Sources */,
 				05F34B0D1C7EE82500BEA049 /* main.m in Sources */,
-				0576AEF81C8D83ED0024DCB4 /* IKTRequestHelper.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

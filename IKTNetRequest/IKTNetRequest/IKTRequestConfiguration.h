@@ -42,14 +42,30 @@ typedef NS_OPTIONS(NSUInteger, IKTRequestMethod) {
 @property (nonatomic, assign) NSStringEncoding receiveDataEncoding;
 
 /*
+ * request safe https Verification protect data
+ */
+@property (nonatomic, assign) BOOL httpsVerification;
+
+/*
+ * request local certificate path
+ */
+@property (nonatomic, copy) NSString *certificatePath;
+
+/*
+ * resquest Error
+ */
+@property (nonatomic, strong) NSError *error;
+
+/*
  * To obtain a configuration object
  */
 - (void)defaultConfiguration;
 
 - (NSMutableURLRequest *)CreatRequestWithUrl:(NSString *)urlString Method:(IKTRequestMethod)method Parameters:(NSDictionary *)parameters Data:(NSData *)data;
 
-- (NSData *)creatRequestDataWithParams:(NSDictionary *)params FileDatas:(NSDictionary *)fileDatas;
+- (NSMutableURLRequest *)CreatSoapRequestWithUrl:(NSString *)url Params:(NSArray *)paramers Method:(NSString *)method Space:(NSString *)space;
 
+- (NSData *)creatRequestDataWithParams:(NSDictionary *)params FileDatas:(NSDictionary *)fileDatas;
 
 @end
 

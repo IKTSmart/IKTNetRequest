@@ -50,6 +50,16 @@ NSString *const IKTDownloadFileData = @"com.iktDownloadFileDataKey";
     [self startTask:task Success:finish Failed:error];
 }
 
+/**
+ * 发起SOAP
+ * launch Request to server using Dictionary
+ */
+- (void)soapDataFromInternetUrl:(NSString *)urlString Parameters:(NSArray *)paramers Method:(NSString *)method Space:(NSString *)space Success:(requestDataFinish)finish Failed:(requestDataError)error{
+    NSMutableURLRequest *request = [self.config CreatSoapRequestWithUrl:urlString Params:paramers Method:method Space:space];
+    NSURLSessionDataTask *task = [[self sessionUsingDefaultSessionConfiguration] dataTaskWithRequest:request];
+    [self startTask:task Success:finish Failed:error];
+}
+
 /*
  * downlown file 文件下载
  * launch task download from url using Dictonary
@@ -130,6 +140,40 @@ NSString *const IKTDownloadFileData = @"com.iktDownloadFileDataKey";
         [self returnDownloadInfo:location.absoluteString];
     }else{
         [self performSelectorOnMainThread:@selector(returnDownloadInfo:) withObject:location.absoluteString waitUntilDone:NO];
+    }
+}
+
+#pragma mark https Auther
+- (void)URLSession:(NSURLSession *)session didReceiveChallenge:(NSURLAuthenticationChallenge *)challenge completionHandler:(void (^)(NSURLSessionAuthChallengeDisposition, NSURLCredential * _Nullable))completionHandler{
+    if (self.config.httpsVerification && self.config.certificatePath.length>0) {
+        //auther server certificate
+        SecTrustRef serverTrust = challenge.protectionSpace.serverTrust;
+        NSData *cerData = [NSData dataWithContentsOfFile:self.config.certificatePath];
+        if (!cerData) {
+            completionHandler(NSURLSessionAuthChallengeCancelAuthenticationChallenge,nil);
+            return;
+        }
+        SecCertificateRef localCertificate = SecCertificateCreateWithData(NULL, (__bridge CFDataRef)(cerData));
+        if (!localCertificate) {
+            completionHandler(NSURLSessionAuthChallengeCancelAuthenticationChallenge,nil);
+            return;
+        }
+        NSArray *trustedCertificates = @[CFBridgingRelease(localCertificate)];
+        SecTrustResultType result;
+        SecTrustSetAnchorCertificates(serverTrust, (__bridge CFArrayRef)trustedCertificates);
+        OSStatus status = SecTrustEvaluate(serverTrust, &result);
+        if (status == errSecSuccess &&
+            (result == kSecTrustResultProceed ||
+             result == kSecTrustResultUnspecified)) {
+                NSURLCredential *cred = [NSURLCredential credentialForTrust:serverTrust];
+                [challenge.sender useCredential:cred forAuthenticationChallenge:challenge];
+                completionHandler(NSURLSessionAuthChallengeUseCredential,[NSURLCredential credentialForTrust:challenge.protectionSpace.serverTrust]);
+            }else{
+                completionHandler(NSURLSessionAuthChallengeCancelAuthenticationChallenge,nil);
+            }
+        
+    }else{
+        completionHandler(NSURLSessionAuthChallengeUseCredential,[NSURLCredential credentialForTrust:challenge.protectionSpace.serverTrust]);
     }
 }
 
