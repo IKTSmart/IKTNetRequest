@@ -35,7 +35,7 @@ NSString *const IKTDownloadFileData = @"com.iktDownloadFileDataKey";
  *launch GET Request to server using Dictionary
  */
 - (void)getDataFromInternetUrl:(NSString *)urlString Parameters:(NSDictionary*)params Success:(requestDataFinish)finish Failed:(requestDataError)error{
-    NSMutableURLRequest *request = [self.config CreatRequestWithUrl:urlString Method:GET Parameters:params Data:nil];
+    NSMutableURLRequest *request = [self.config CreatRequestWithUrl:urlString Method:GET Parameters:params Data:nil SoapParameters:nil SoapMethod:nil SoapSpace:nil];
     NSURLSessionDataTask *task = [[self sessionUsingDefaultSessionConfiguration] dataTaskWithRequest:request];
     [self startTask:task Success:finish Failed:error];
 }
@@ -45,17 +45,7 @@ NSString *const IKTDownloadFileData = @"com.iktDownloadFileDataKey";
  * launch Request to server using Dictionary
  */
 - (void)postDataFromInternetUrl:(NSString *)urlString Parameters:(NSDictionary*)params Success:(requestDataFinish)finish Failed:(requestDataError)error{
-    NSMutableURLRequest *request = [self.config CreatRequestWithUrl:urlString Method:POST Parameters:params Data:nil];
-    NSURLSessionDataTask *task = [[self sessionUsingDefaultSessionConfiguration] dataTaskWithRequest:request];
-    [self startTask:task Success:finish Failed:error];
-}
-
-/**
- * 发起SOAP
- * launch Request to server using Dictionary
- */
-- (void)soapDataFromInternetUrl:(NSString *)urlString Parameters:(NSArray *)paramers Method:(NSString *)method Space:(NSString *)space Success:(requestDataFinish)finish Failed:(requestDataError)error{
-    NSMutableURLRequest *request = [self.config CreatSoapRequestWithUrl:urlString Params:paramers Method:method Space:space];
+    NSMutableURLRequest *request = [self.config CreatRequestWithUrl:urlString Method:POST Parameters:params Data:nil SoapParameters:nil SoapMethod:nil SoapSpace:nil];
     NSURLSessionDataTask *task = [[self sessionUsingDefaultSessionConfiguration] dataTaskWithRequest:request];
     [self startTask:task Success:finish Failed:error];
 }
@@ -81,7 +71,7 @@ NSString *const IKTDownloadFileData = @"com.iktDownloadFileDataKey";
  */
 - (void)uploadFileToServerUrl:(NSString *)urlString Params:(NSDictionary *)params FileDatas:(NSDictionary *)fileDatas Success:(requestDataFinish)finish Failed:(requestDataError)error{
     NSData *postData = [self.config creatRequestDataWithParams:params FileDatas:fileDatas];
-    NSMutableURLRequest *request = [self.config CreatRequestWithUrl:urlString Method:UPLOAD Parameters:params Data:postData];
+    NSMutableURLRequest *request = [self.config CreatRequestWithUrl:urlString Method:UPLOAD Parameters:params Data:postData SoapParameters:nil SoapMethod:nil SoapSpace:nil];
     NSURLSessionUploadTask *uploadTask = [[self sessionUsingDefaultSessionConfiguration] uploadTaskWithRequest:request fromData:postData];
     [self startTask:uploadTask Success:finish Failed:error];
 }
@@ -145,14 +135,15 @@ NSString *const IKTDownloadFileData = @"com.iktDownloadFileDataKey";
 
 #pragma mark https Auther
 - (void)URLSession:(NSURLSession *)session didReceiveChallenge:(NSURLAuthenticationChallenge *)challenge completionHandler:(void (^)(NSURLSessionAuthChallengeDisposition, NSURLCredential * _Nullable))completionHandler{
-    if (self.config.httpsVerification && self.config.certificatePath.length>0) {
+    if (self.config.httpsVerification) {
         //auther server certificate
         SecTrustRef serverTrust = challenge.protectionSpace.serverTrust;
-        NSData *cerData = [NSData dataWithContentsOfFile:self.config.certificatePath];
+        NSData *cerData = self.config.certificateData;
         if (!cerData) {
             completionHandler(NSURLSessionAuthChallengeCancelAuthenticationChallenge,nil);
             return;
         }
+
         SecCertificateRef localCertificate = SecCertificateCreateWithData(NULL, (__bridge CFDataRef)(cerData));
         if (!localCertificate) {
             completionHandler(NSURLSessionAuthChallengeCancelAuthenticationChallenge,nil);
@@ -167,11 +158,10 @@ NSString *const IKTDownloadFileData = @"com.iktDownloadFileDataKey";
              result == kSecTrustResultUnspecified)) {
                 NSURLCredential *cred = [NSURLCredential credentialForTrust:serverTrust];
                 [challenge.sender useCredential:cred forAuthenticationChallenge:challenge];
-                completionHandler(NSURLSessionAuthChallengeUseCredential,[NSURLCredential credentialForTrust:challenge.protectionSpace.serverTrust]);
+                completionHandler(NSURLSessionAuthChallengeRejectProtectionSpace,[NSURLCredential credentialForTrust:challenge.protectionSpace.serverTrust]);
             }else{
                 completionHandler(NSURLSessionAuthChallengeCancelAuthenticationChallenge,nil);
             }
-        
     }else{
         completionHandler(NSURLSessionAuthChallengeUseCredential,[NSURLCredential credentialForTrust:challenge.protectionSpace.serverTrust]);
     }

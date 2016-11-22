@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-@class IKTRequestConfiguration;
+#import "IKTRequestConfiguration.h"
 
 typedef void (^requestDataFinish) (id responseObject);
 typedef void (^requestDataError) (NSError *error);
@@ -41,18 +41,6 @@ typedef void (^requestDataProgress) (NSNumber *progress);
  * @ Failed         访问失败的回调
  */
 - (void)postDataFromInternetUrl:(NSString *)urlString Parameters:(NSDictionary*)dic Success:(requestDataFinish)finish Failed:(requestDataError)error;
-
-/*
- * SOAP Request SOAP请求
- * @params
- * @ urlString      请求地址
- * @ params         请求参数数组 每个元素是字典
- * @ method         WebServer 方法名
- * @ space          WebSwevwe 命名空间
- * @ Success        访问成功的回调
- * @ Failed         访问失败的回调
- */
-- (void)soapDataFromInternetUrl:(NSString *)urlString Parameters:(NSArray *)paramers Method:(NSString *)method Space:(NSString *)space Success:(requestDataFinish)finish Failed:(requestDataError)error;
 
 /*
  * Downlown File 文件下载

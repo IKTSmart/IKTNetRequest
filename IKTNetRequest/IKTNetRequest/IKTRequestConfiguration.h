@@ -11,9 +11,10 @@
 @interface IKTRequestConfiguration : NSObject
 
 typedef NS_OPTIONS(NSUInteger, IKTRequestMethod) {
-    GET = 1 << 0,
-    POST = 1 << 1,
-    UPLOAD = 1 << 2,
+    GET     = 1 << 0,
+    POST    = 1 << 1,
+    UPLOAD  = 1 << 2,
+    SOAP    = 1<<3
 };
 
 /*
@@ -52,6 +53,16 @@ typedef NS_OPTIONS(NSUInteger, IKTRequestMethod) {
 @property (nonatomic, copy) NSString *certificatePath;
 
 /*
+ * request local Certificate Data
+ */
+@property (nonatomic, strong, readonly) NSData *certificateData;
+
+/*
+ * Https Certificate
+ */
+@property (nonatomic, assign) BOOL cerExpired;
+
+/*
  * resquest Error
  */
 @property (nonatomic, strong) NSError *error;
@@ -61,11 +72,10 @@ typedef NS_OPTIONS(NSUInteger, IKTRequestMethod) {
  */
 - (void)defaultConfiguration;
 
-- (NSMutableURLRequest *)CreatRequestWithUrl:(NSString *)urlString Method:(IKTRequestMethod)method Parameters:(NSDictionary *)parameters Data:(NSData *)data;
-
-- (NSMutableURLRequest *)CreatSoapRequestWithUrl:(NSString *)url Params:(NSArray *)paramers Method:(NSString *)method Space:(NSString *)space;
+- (NSMutableURLRequest *)CreatRequestWithUrl:(NSString *)urlString Method:(IKTRequestMethod)method Parameters:(NSDictionary *)parameters Data:(NSData *)data SoapParameters:(NSMutableArray *)soapParameters SoapMethod:(NSString *)soapMethod SoapSpace:(NSString *)soapSpace;
 
 - (NSData *)creatRequestDataWithParams:(NSDictionary *)params FileDatas:(NSDictionary *)fileDatas;
+
 
 @end
 

@@ -9,10 +9,26 @@
 #import "IKTRequestConfiguration.h"
 #import "IKTRequestHelper.h"
 
+static NSData *IKTAppAuthHttpsData = nil;
+
 @implementation IKTRequestConfiguration
 
-- (NSMutableURLRequest *)CreatRequestWithUrl:(NSString *)urlString Method:(IKTRequestMethod)method Parameters:(NSDictionary *)parameters Data:(NSData *)data{
++ (void)acquireHttpsCertificationDataWithPath:(NSString *)path{
+    IKTAppAuthHttpsData = [NSData dataWithContentsOfFile:path];
+}
+
+- (NSMutableURLRequest *)CreatRequestWithUrl:(NSString *)urlString Method:(IKTRequestMethod)method Parameters:(NSDictionary *)parameters Data:(NSData *)data SoapParameters:(NSMutableArray *)soapParameters SoapMethod:(NSString *)soapMethod SoapSpace:(NSString *)soapSpace{
     NSParameterAssert(urlString);
+    static dispatch_once_t iktCerOnceToken;
+    __weak typeof(self) weakSelf = self;
+    dispatch_once(&iktCerOnceToken, ^{
+        if (weakSelf.certificatePath && weakSelf.httpsVerification) {
+            [IKTRequestConfiguration acquireHttpsCertificationDataWithPath:weakSelf.certificatePath];
+        }else if (weakSelf.httpsVerification){
+            NSString *path = [[NSBundle mainBundle] pathForResource:@"" ofType:@"cer"];
+            [IKTRequestConfiguration acquireHttpsCertificationDataWithPath:path];
+        }
+    });
     switch (method) {
         case GET:
             return [self praviteCreatGetRequest:urlString Parameters:parameters];
@@ -20,11 +36,45 @@
             return [self praviteCreatPostRequest:urlString Parameters:parameters];
         case UPLOAD :
             return [self praviteCreatUploadRequest:urlString Parameters:parameters Data:data];
+        case SOAP:
+            return [self praviteCreatSoapRequestWithUrl:urlString Params:soapParameters Method:soapMethod Space:soapSpace];
+            return nil;
     }
     return nil;
 }
 
-- (NSMutableURLRequest *)CreatSoapRequestWithUrl:(NSString *)url Params:(NSArray *)paramers Method:(NSString *)method Space:(NSString *)space{
+- (NSMutableURLRequest *)praviteCreatGetRequest:(NSString *)urlString Parameters:(NSDictionary *)parameters{
+    NSString *separateChar = [urlString containsString:@"?"] ? @"&" : @"?";
+    NSString *parameterString = parameters != nil ? [IKTRequestHelper returnStringFromDictionary:parameters] : @"";
+    NSString *totalString = parameterString.length>0 ? [NSString stringWithFormat:@"%@%@%@",urlString,separateChar,parameterString] :urlString;
+    NSString *utfTotalStr = [totalString stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
+    NSMutableURLRequest *request = [self PublicAddHeadsWith:utfTotalStr];
+    [request setHTTPMethod:@"GET"];
+    return request;
+}
+
+- (NSMutableURLRequest *)praviteCreatPostRequest:(NSString *)urlString Parameters:(NSDictionary *)parameters{
+    NSMutableURLRequest *request = [self PublicAddHeadsWith:urlString];
+    NSString *postString = parameters != nil ? [IKTRequestHelper returnStringFromDictionary:parameters] : @"";
+    NSString *utfTotalStr = [postString stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
+    NSData *postData = [utfTotalStr dataUsingEncoding:NSUTF8StringEncoding];
+    [request setHTTPMethod:@"POST"];
+    [request setHTTPBody:postData];
+    return request;
+    
+}
+
+- (NSMutableURLRequest *)praviteCreatUploadRequest:(NSString *)urlString Parameters:(NSDictionary *)parameters Data:(NSData *)data{
+    NSMutableURLRequest *request = [self PublicAddHeadsWith:urlString];
+    NSString *content = [[NSString alloc]initWithFormat:@"multipart/form-data; boundary=%@",self.boundary];
+    [request setValue:content forHTTPHeaderField:@"Content-Type"];
+    request.timeoutInterval = self.timeOut;
+    [request setValue:[NSString stringWithFormat:@"%lu", (unsigned long)[data length]] forHTTPHeaderField:@"Content-Length"];
+    [request setHTTPMethod:@"POST"];
+    return request;
+}
+
+- (NSMutableURLRequest *)praviteCreatSoapRequestWithUrl:(NSString *)url Params:(NSMutableArray *)paramers Method:(NSString *)method Space:(NSString *)space{
     NSMutableArray *pra = [NSMutableArray arrayWithArray:paramers];
     NSMutableURLRequest *request = [self PublicAddHeadsWith:url];
     //组织参数
@@ -58,61 +108,6 @@
     [request setHTTPMethod:@"POST"];
     [request setHTTPBody:[webServiceStr dataUsingEncoding:NSUTF8StringEncoding]];
     
-    return request;
-}
-
-- (NSMutableURLRequest *)praviteCreatGetRequest:(NSString *)urlString Parameters:(NSDictionary *)parameters{
-    NSString *separateChar = [urlString containsString:@"?"] ? @"&" : @"?";
-    NSString *parameterString = parameters != nil ? [IKTRequestHelper returnStringFromDictionary:parameters] : @"";
-    NSString *totalString = parameterString.length>0 ? [NSString stringWithFormat:@"%@%@%@",urlString,separateChar,parameterString] :urlString;
-    NSString *utfTotalStr = [totalString stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
-    NSMutableURLRequest *request = [self PublicAddHeadsWith:utfTotalStr];
-    [request setHTTPMethod:@"GET"];
-    return request;
-}
-
-//new
-- (NSMutableURLRequest *)praviteCreatPostRequest:(NSString *)urlString Parameters:(NSDictionary *)parameters{
-    NSMutableURLRequest *request = [self PublicAddHeadsWith:urlString];
-    
-    NSMutableString *paramerString = [NSMutableString stringWithString:@"<querySolicitList xmlns=\"http://www.ahga.gov.cn/cms/XFire/services/AppWebService?wsdl\" id=\"o0\" c:root=\"1\">"];
-    NSArray *keys = [parameters allKeys];
-    NSArray *values = [parameters allValues];
-    for (NSInteger i = 0; i < keys.count; i++) {
-        NSString *key = keys[i];
-        NSString *value = values[i];
-        [paramerString appendFormat:@"<%@ i:type=\"d:string\">%@</%@>",key,value,key];
-    }
-    [paramerString appendFormat:@"</querySolicitList>\n"];
-    
-    //创建webserberstring
-    NSString *webServiceStr = [NSString stringWithFormat:@"<v:Envelope xmlns:i=\"http://www.w3.org/1999/XMLSchema-instance\" xmlns:d=\"http://www.w3.org/1999/XMLSchema\" xmlns:c=\"http://schemas.xmlsoap.org/soap/encoding/\" xmlns:v=\"http://schemas.xmlsoap.org/soap/envelope/\">\n"
-     "<v:Header />\n"
-     "<v:Body>\n"
-     "%@"
-     "</v:Body></v:Envelope>",paramerString];
-    
-    //方法字符串
-    NSString *SOAPActionStr = @"http://www.ahga.gov.cn/cms/XFire/services/AppWebService?wsdl/querySolicitList";
-    
-    NSString *msgLength = [NSString stringWithFormat:@"%ld", webServiceStr.length];
-    [request addValue:@"text/xml;charset=utf-8" forHTTPHeaderField:@"Content-Type"];
-    [request addValue:SOAPActionStr forHTTPHeaderField:@"SOAPAction"];
-    [request addValue:msgLength forHTTPHeaderField:@"Content-Length"];
-    [request addValue:@"www.ahga.gov.cn" forHTTPHeaderField:@"host"];
-    [request setHTTPMethod:@"POST"];
-    [request setHTTPBody:[webServiceStr dataUsingEncoding:NSUTF8StringEncoding]];
-    
-    return request;
-}
-
-- (NSMutableURLRequest *)praviteCreatUploadRequest:(NSString *)urlString Parameters:(NSDictionary *)parameters Data:(NSData *)data{
-    NSMutableURLRequest *request = [self PublicAddHeadsWith:urlString];
-    NSString *content = [[NSString alloc]initWithFormat:@"multipart/form-data; boundary=%@",self.boundary];
-    [request setValue:content forHTTPHeaderField:@"Content-Type"];
-    request.timeoutInterval = self.timeOut;
-    [request setValue:[NSString stringWithFormat:@"%lu", (unsigned long)[data length]] forHTTPHeaderField:@"Content-Length"];
-    [request setHTTPMethod:@"POST"];
     return request;
 }
 
@@ -195,6 +190,10 @@ static NSString *IKTRequestSpeaterIdentifierBoundaryEnd(NSString *boundary){
     //add end identifier
     [requestData appendData:[IKTRequestSpeaterIdentifierBoundaryEnd(self.boundary) dataUsingEncoding:NSUTF8StringEncoding]];
     return [NSData dataWithData:requestData];
+}
+
+- (NSData *)certificateData{
+    return IKTAppAuthHttpsData;
 }
 
 @end
