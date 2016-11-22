@@ -7,8 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		054C54EF1DE42A6D00F7BA25 /* download.cer in Resources */ = {isa = PBXBuildFile; fileRef = 054C54EE1DE42A6200F7BA25 /* download.cer */; };
 		0576AEF81C8D83ED0024DCB4 /* IKTRequestHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 0576AEF71C8D83ED0024DCB4 /* IKTRequestHelper.m */; };
+		05CBEF6E1DE4301100AEF126 /* myImage.png in Resources */ = {isa = PBXBuildFile; fileRef = 05CBEF6D1DE4301100AEF126 /* myImage.png */; };
+		05CBEF6F1DE4309E00AEF126 /* download.cer in Resources */ = {isa = PBXBuildFile; fileRef = 054C54EE1DE42A6200F7BA25 /* download.cer */; };
 		05F34B0D1C7EE82500BEA049 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 05F34B0C1C7EE82500BEA049 /* main.m */; };
 		05F34B101C7EE82500BEA049 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 05F34B0F1C7EE82500BEA049 /* AppDelegate.m */; };
 		05F34B131C7EE82500BEA049 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 05F34B121C7EE82500BEA049 /* ViewController.m */; };
@@ -44,6 +45,7 @@
 		0576AEF61C8D83ED0024DCB4 /* IKTRequestHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IKTRequestHelper.h; sourceTree = "<group>"; };
 		0576AEF71C8D83ED0024DCB4 /* IKTRequestHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IKTRequestHelper.m; sourceTree = "<group>"; };
 		0576AEF91C8DC5D70024DCB4 /* IKTNetHeader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = IKTNetHeader.h; sourceTree = "<group>"; };
+		05CBEF6D1DE4301100AEF126 /* myImage.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = myImage.png; sourceTree = "<group>"; };
 		05F34B081C7EE82500BEA049 /* IKTNetRequest.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = IKTNetRequest.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		05F34B0C1C7EE82500BEA049 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		05F34B0E1C7EE82500BEA049 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -119,6 +121,7 @@
 				05F34B0F1C7EE82500BEA049 /* AppDelegate.m */,
 				054C54EE1DE42A6200F7BA25 /* download.cer */,
 				054C54ED1DE42A5100F7BA25 /* baidu.com.cer */,
+				05CBEF6D1DE4301100AEF126 /* myImage.png */,
 				05F34B111C7EE82500BEA049 /* ViewController.h */,
 				05F34B121C7EE82500BEA049 /* ViewController.m */,
 				05F34B141C7EE82500BEA049 /* Main.storyboard */,
@@ -273,7 +276,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				054C54EF1DE42A6D00F7BA25 /* download.cer in Resources */,
+				05CBEF6F1DE4309E00AEF126 /* download.cer in Resources */,
+				05CBEF6E1DE4301100AEF126 /* myImage.png in Resources */,
 				05F34B1B1C7EE82600BEA049 /* LaunchScreen.storyboard in Resources */,
 				05F34B181C7EE82600BEA049 /* Assets.xcassets in Resources */,
 				05F34B161C7EE82500BEA049 /* Main.storyboard in Resources */,

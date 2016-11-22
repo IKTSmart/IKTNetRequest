@@ -19,27 +19,28 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
 
-//    //下载
-//    NSString *url = @"imageurl";
-//    [[IKTNetRequest manage] downloadFileFromUrl:url Success:^(id responseObject) {
-//        [self setMyImage:responseObject[IKTDownloadFileData]];
-//    } Failed:^(NSError *error) {
-//        NSLog(@"faild");
-//    } Progress:^(NSNumber *progress) {
-//        NSLog(@"%f",[progress floatValue]);
-//    }];
-//    
-//    //上传
-//    NSString *uploadUrl = @"uploadImageUrl";
-//    UIImage *image = [UIImage imageNamed:@"myImage"];
-//    NSData *data = UIImageJPEGRepresentation(image, 1.0);
-//    NSMutableDictionary *dict = [NSMutableDictionary dictionaryWithDictionary:@{@"image":data}];
-//    [[IKTNetRequest manage] uploadFileToServerUrl:uploadUrl Params:nil FileDatas:dict Success:^(id responseObject) {
-//        NSLog(@"%@",responseObject);
-//    } Failed:^(NSError *error) {
-//        NSLog(@"faild");
-//    }];
+    //文件下载
+    NSString *url = @"imageurl";
+    [[IKTNetRequest manage] downloadFileFromUrl:url Success:^(id responseObject) {
+        [self setMyImage:responseObject[IKTDownloadFileData]];
+    } Failed:^(NSError *error) {
+        NSLog(@"download faild");
+    } Progress:^(NSNumber *progress) {
+        NSLog(@"download %f",[progress floatValue]);
+    }];
     
+    //文件上传
+    NSString *uploadUrl = @"uploadImageUrl";
+    UIImage *image = [UIImage imageNamed:@"myImage"];
+    NSData *data = UIImageJPEGRepresentation(image, 1.0);
+    NSMutableDictionary *dict = [NSMutableDictionary dictionaryWithDictionary:@{@"image":data}];
+    [[IKTNetRequest manage] uploadFileToServerUrl:uploadUrl Params:nil FileDatas:dict Success:^(id responseObject) {
+        NSLog(@"%@",responseObject);
+    } Failed:^(NSError *error) {
+        NSLog(@"upload faild");
+    }];
+    
+    //使用HTTPS验证(打开HTTPS验证在工程内添加.cer证书文件 自动搜索文件)
     IKTNetRequest *manager = [IKTNetRequest manage];
     manager.config.httpsVerification = YES;
     //GET
@@ -47,21 +48,21 @@
     [manager getDataFromInternetUrl:getUrl Parameters:nil Success:^(id responseObject) {
         NSLog(@"%@",responseObject);
     } Failed:^(NSError *error) {
-        NSLog(@"err:%@",error);
+        NSLog(@"get err:%@",error);
     }];
 
     //POST
     /*
-     设置请求头
+     配置请求头
      IKTNetRequest *manage = [IKTNetRequest manage];
      manage.config.headers = @{@"iktkey":@"value"};
      */
-//    NSString *postUrl = @"http://127.0.0.1:8881/userLogin";
-//    [[IKTNetRequest manage] postDataFromInternetUrl:postUrl Parameters:@{@"userName":@"admin",@"passWord":@"admin"} Success:^(id responseObject) {
-//        NSLog(@"%@",responseObject);
-//    } Failed:^(NSError *error) {
-//        NSLog(@"faild");
-//    }];
+    NSString *postUrl = @"http://127.0.0.1:8881/userLogin";
+    [[IKTNetRequest manage] postDataFromInternetUrl:postUrl Parameters:@{@"userName":@"admin",@"passWord":@"admin"} Success:^(id responseObject) {
+        NSLog(@"%@",responseObject);
+    } Failed:^(NSError *error) {
+        NSLog(@"post faild");
+    }];
 }
 
 - (void)setMyImage:(NSData *)imageData{

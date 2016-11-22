@@ -22,9 +22,9 @@ static NSData *IKTAppAuthHttpsData = nil;
     static dispatch_once_t iktCerOnceToken;
     __weak typeof(self) weakSelf = self;
     dispatch_once(&iktCerOnceToken, ^{
-        if (weakSelf.certificatePath && weakSelf.httpsVerification) {
+        if (weakSelf.certificatePath) {
             [IKTRequestConfiguration acquireHttpsCertificationDataWithPath:weakSelf.certificatePath];
-        }else if (weakSelf.httpsVerification){
+        }else{
             NSString *path = [[NSBundle mainBundle] pathForResource:@"" ofType:@"cer"];
             [IKTRequestConfiguration acquireHttpsCertificationDataWithPath:path];
         }
