@@ -64,6 +64,13 @@
         NSLog(@"post faild");
     }];
     
+    //Soap
+    [[IKTNetRequest manage] soapDataFromInternetUrl:@"url" SoapParameters:[NSMutableArray array] SoapMethod:@"uc8484" SoapSpace:@"down" Success:^(id responseObject) {
+        NSLog(@"%@", responseObject);
+    } Failed:^(NSError *error) {
+        NSLog(@"soap faild");
+    }];
+    
 }
 
 - (void)setMyImage:(NSData *)imageData{

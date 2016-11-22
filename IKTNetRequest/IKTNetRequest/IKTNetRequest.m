@@ -51,6 +51,15 @@ NSString *const IKTDownloadFileData = @"com.iktDownloadFileDataKey";
 }
 
 /*
+ * 发起SOAP
+ */
+- (void)soapDataFromInternetUrl:(NSString *)urlString SoapParameters:(NSMutableArray*)soapParameters SoapMethod:(NSString *)soapMethod SoapSpace:(NSString *)soapSpace Success:(requestDataFinish)finish Failed:(requestDataError)error{
+    NSMutableURLRequest *request = [self.config CreatRequestWithUrl:urlString Method:SOAP Parameters:nil Data:nil SoapParameters:soapParameters SoapMethod:nil SoapSpace:nil];
+    NSURLSessionDataTask *task = [[self sessionUsingDefaultSessionConfiguration] dataTaskWithRequest:request];
+    [self startTask:task Success:finish Failed:error];
+}
+
+/*
  * downlown file 文件下载
  * launch task download from url using Dictonary
  */
