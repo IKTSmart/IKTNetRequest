@@ -63,6 +63,7 @@
     } Failed:^(NSError *error) {
         NSLog(@"post faild");
     }];
+    
 }
 
 - (void)setMyImage:(NSData *)imageData{
