@@ -57,7 +57,8 @@ Object-C网络请求框架
     } Failed:^(NSError *error) {
         NSLog(@"faild");
     }];
-    //Soap
+    
+    //SOAP
     [[IKTNetRequest manage] soapDataFromInternetUrl:@"url" SoapParameters:[NSMutableArray array] SoapMethod:@"uc8484" SoapSpace:@"down" Success:^(id responseObject) {
         NSLog(@"%@", responseObject);
     } Failed:^(NSError *error) {
