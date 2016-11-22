@@ -2,60 +2,60 @@
 Object-C网络请求框架
 
 > 简单快速的Object-C网络请求框架。
-> 支持GET、POST、上传、下载。
+> 支持GET、POST、SOAP、文件上传、文件下载。
+> 支持HTTPS验证。
+> 支持配置请求头。
 
  
 
 ### 示例
 ``` objectivec
-    //下载
-	NSString *url = @"imageurl";
-	[[IKTNetRequest manage] downloadFileFromUrl:url Success:^(id responseObject) {
-	//请求成功
+    //下载文件
+    NSString *url = @"imageurl";
+    [[IKTNetRequest manage] downloadFileFromUrl:url Success:^(id responseObject) {
+        [self setMyImage:responseObject[IKTDownloadFileData]];
     } Failed:^(NSError *error) {
-    //请求失败
+        NSLog(@"faild");
     } Progress:^(NSNumber *progress) {
-    //请求进度
-    NSLog(@"%f",[progress floatValue]);
+        NSLog(@"%f",[progress floatValue]);
     }];
     
-    //上传
+    //上传文件
     NSString *uploadUrl = @"uploadImageUrl";
     UIImage *image = [UIImage imageNamed:@"myImage"];
     NSData *data = UIImageJPEGRepresentation(image, 1.0);
     NSMutableDictionary *dict = [NSMutableDictionary dictionaryWithDictionary:@{@"image":data}];
     [[IKTNetRequest manage] uploadFileToServerUrl:uploadUrl Params:nil FileDatas:dict Success:^(id responseObject) {
-	//上传成功
+        NSLog(@"%@",responseObject);
     } Failed:^(NSError *error) {
-	//上传失败
+        NSLog(@"faild");
     }];
     
+    //使用HTTPS验证(打开HTTPS验证在工程内添加.cer证书文件 自动搜索文件)
+    IKTNetRequest *manager = [IKTNetRequest manage];
+    manager.config.httpsVerification = YES;
     //GET
-    NSString *getUrl = @"getURL";
-    [[IKTNetRequest manage] getDataFromInternetUrl:getUrl Parameters:nil Success:^(id responseObject) {
-	//请求成功
+    NSString *getUrl = @"https://download.uc848.com";
+    [manager getDataFromInternetUrl:getUrl Parameters:nil Success:^(id responseObject) {
+        NSLog(@"%@",responseObject);
     } Failed:^(NSError *error) {
-	//请求失败
+        NSLog(@"err:%@",error);
     }];
 
     //POST
     /*
-     设置请求头
+     配置请求头
      IKTNetRequest *manage = [IKTNetRequest manage];
      manage.config.headers = @{@"iktkey":@"value"};
      */
-    NSString *postUrl = @"postUrl";
-    [[IKTNetRequest manage] postDataFromInternetUrl:postUrl Parameters:@{@"userName":@"admin"} Success:^(id responseObject) {
-	//请求成功
+    NSString *postUrl = @"http://127.0.0.1:8881/userLogin";
+    [[IKTNetRequest manage] postDataFromInternetUrl:postUrl Parameters:@{@"userName":@"admin",@"passWord":@"admin"} Success:^(id responseObject) {
+        NSLog(@"%@",responseObject);
     } Failed:^(NSError *error) {
-	//请求失败
+        NSLog(@"faild");
     }];
 ```
 
 
 ## 反馈与建议
-- 微信：[IKTDev]()
-- 邮箱：<5786117@qq.com>
-
----------
-如遇到BUG或功能不够用，希望你能与我联系。
+- 邮箱：<sneakey@yeah.net>
